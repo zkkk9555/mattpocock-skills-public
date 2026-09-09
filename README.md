@@ -33,9 +33,9 @@ Windows PowerShell：
 & ([scriptblock]::Create((irm https://raw.githubusercontent.com/zkkk9555/autopilot-skill/main/install.ps1))) -WithUpstream
 ```
 
-默认装到 `~/.agents/skills/`（跨工具通用目录）；想换位置，设置环境变量 `MATTP_SKILLS_DIR`。
+默认装到 `~/.agents/skills/`（跨工具通用目录）；想换位置，设置环境变量 `AUTOPILOT_SKILLS_DIR`。
 
-**手动安装**：① 上游 25 skill：`git clone --depth 1 https://github.com/mattpocock/skills`，把每个含 `SKILL.md` 的子目录复制进 skills 目录；② 本 driver：把 `mattpocock-skills/` 复制进同一个 skills 目录。
+**手动安装**：① 上游 25 skill：`git clone --depth 1 https://github.com/mattpocock/skills`，把每个含 `SKILL.md` 的子目录复制进 skills 目录；② 本 driver：把 `autopilot/` 复制进同一个 skills 目录。
 
 **常见的 skills 目录**（任选其一，agent 会自动发现）：
 

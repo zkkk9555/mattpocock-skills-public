@@ -5,12 +5,12 @@
 # Usage:
 #   curl -fsSL <raw install.sh> | bash
 #   curl -fsSL <raw install.sh> | bash -s -- --with-upstream
-# Env override: MATTP_SKILLS_DIR=/your/skills/dir
+# Env override: AUTOPILOT_SKILLS_DIR=/your/skills/dir
 set -euo pipefail
 
 PUB_URL="https://github.com/zkkk9555/autopilot-skill"
 UPSTREAM_URL="https://github.com/mattpocock/skills"
-DEST="${MATTP_SKILLS_DIR:-$HOME/.agents/skills}"
+DEST="${AUTOPILOT_SKILLS_DIR:-$HOME/.agents/skills}"
 
 echo "==> Target skills dir: $DEST"
 mkdir -p "$DEST"
@@ -59,7 +59,7 @@ DONE
 
 # Central logbook: create the first book from the example so the driver has
 # somewhere to append from day one (one book per install, language fixed).
-LOGBOOK="${MATTP_LOGBOOK:-$HOME/.autopilot/USAGE-LOG.md}"
+LOGBOOK="${AUTOPILOT_LOGBOOK:-$HOME/.autopilot/USAGE-LOG.md}"
 if [ ! -f "$LOGBOOK" ]; then
   mkdir -p "$(dirname "$LOGBOOK")"
   PUB_TMP="$(mktemp -d)"

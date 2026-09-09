@@ -4,13 +4,13 @@
 # Usage:
 #   & ([scriptblock]::Create((irm https://raw.githubusercontent.com/zkkk9555/autopilot-skill/main/install.ps1)))
 #   & ([scriptblock]::Create((irm https://raw.githubusercontent.com/zkkk9555/autopilot-skill/main/install.ps1))) -WithUpstream
-# Env override: $env:MATTP_SKILLS_DIR = "D:\your\skills\dir"
+# Env override: $env:AUTOPILOT_SKILLS_DIR = "D:\your\skills\dir"
 param([switch]$WithUpstream)
 $ErrorActionPreference = "Stop"
 
 $PubUrl = "https://github.com/zkkk9555/autopilot-skill"
 $UpstreamUrl = "https://github.com/mattpocock/skills"
-$Dest = if ($env:MATTP_SKILLS_DIR) { $env:MATTP_SKILLS_DIR } else { Join-Path $HOME ".agents\skills" }
+$Dest = if ($env:AUTOPILOT_SKILLS_DIR) { $env:AUTOPILOT_SKILLS_DIR } else { Join-Path $HOME ".agents\skills" }
 
 Write-Host "==> Target skills dir: $Dest"
 New-Item -ItemType Directory -Force -Path $Dest | Out-Null
@@ -51,7 +51,7 @@ try {
   Write-Host "==> Done. Restart your agent, then say one sentence, e.g.:"
   Write-Host '    "The sidebar toggle stopped working - check and fix it."'
   # Central logbook: create the first book so the driver can append from day one.
-  $Logbook = if ($env:MATTP_LOGBOOK) { $env:MATTP_LOGBOOK } else { Join-Path $HOME ".autopilot\USAGE-LOG.md" }
+  $Logbook = if ($env:AUTOPILOT_LOGBOOK) { $env:AUTOPILOT_LOGBOOK } else { Join-Path $HOME ".autopilot\USAGE-LOG.md" }
   if (-not (Test-Path $Logbook)) {
     New-Item -ItemType Directory -Force -Path (Split-Path $Logbook) | Out-Null
     $head = "# autopilot 中央使用日志`r`n`r`n> 本本由安装脚本创建（$((Get-Date).ToUniversalTime().ToString('yyyy-MM-dd'))）。规则：只追加、不改旧条；每次任务收尾追加一条；升级打水位线。格式见 USAGE-LOG.example.md。`r`n"

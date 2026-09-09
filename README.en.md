@@ -58,7 +58,7 @@ Windows PowerShell:
 ```
 
 Default target is `~/.agents/skills/` (the cross-tool standard); override with
-the `MATTP_SKILLS_DIR` environment variable.
+the `AUTOPILOT_SKILLS_DIR` environment variable.
 
 **Manual install**: (1) upstream 25 skills: `git clone --depth 1
 https://github.com/mattpocock/skills`, copy every sub-directory containing a
