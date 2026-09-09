@@ -44,11 +44,13 @@
 - Negative evidence (V2.011): proving "absent" needs N zero-hit evidences —
   which places, which keys, how many hits each — never "not found". Three
   zero-hits across independent surfaces outranks one eloquent absence claim.
-- T0-no-verdict counter (V2.011): when the T0 ask-matt call returns a generic
-  doc with no lane verdict, log `T0 空转第 N 次` in JOURNAL/NOTES. Three
-  consecutive no-verdict rounds = a repair signal for skill-creator (the
-  ask-matt routing needs fixing), not a driver failure — keep routing via
-  prelane self-decision meanwhile.
+- T0-no-verdict signal (V2.011立项, V2.015正名): `ask-matt` is a routing map,
+  not a judge — expect the generic doc, take the lane from your own prelane
+  decision. Log `T0 恒空` ONCE per project (the first round it proves
+  verdict-less), then stop counting: one signal is enough for skill-creator.
+  In a proven-verdictless project, invoke T0 only in the session's first
+  round and route via prelane directly afterwards (downshift — saves tokens
+  and noise). Counting every round ("空转第 N 次") is banned: signal, not noise.
 - Duplicate-PR pre-check (V2.009): before opening any upstream PR — (1) open
   the target issue's timeline and read cross-referenced PRs; (2) search the
   repo for `close #<issue>` / `closes #<issue>`; (3) confirm no OPEN

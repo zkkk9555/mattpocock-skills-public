@@ -67,16 +67,23 @@ above only routes; the pointed file decides.
    `references/` files it points at; later rounds in the same session skip
    the re-read and rely on what is already in context. Then read the project
    convention tail, the last 5 JOURNAL entries, and the last 10 `calls.log`
-   lines before acting. A fresh window that was not invoked checks for
+   lines before acting. Logbook discipline (V2.015): read the last
+   `[水位线]` entry plus at most the 3 entries after it — never the whole
+   logbook; the watermark tells you what was consumed, the tail tells you
+   what is new. A fresh window that was not invoked checks for
    `.scratch/WORKFLOW-ACTIVE.md` via the standing AGENTS.md hook (see
    `references/trace-discipline.md`) and re-invokes this driver itself.
 2. Open the round with one `ask-matt` T0 call first (Skill-tool call order:
-   T0 leads; a late-added `ask-matt` does not satisfy T0). Quote the gate
-   verdict on any round that ran Gate 0 against a fresh change surface
+   T0 leads; a late-added `ask-matt` does not satisfy T0). `ask-matt` is a
+   routing map, not a judge — it returns the same generic doc every time;
+   the lane verdict always comes from your own prelane decision (V2.015).
+   Quote the gate verdict on any round that ran Gate 0 against a fresh change surface
    (first touch of a repo, or a re-run on new work); `gate n/a (touched)`
    is only the display shorthand for later rounds in the same session on
    the same repo — Gate 0 itself still re-runs whenever the change surface
-   is new, and the real verdict goes to NOTES.
+   is new, and the real verdict goes to NOTES. In a project where T0 already
+   proved verdict-less once, skip re-invoking it after the session's first
+   round and route via prelane directly (V2.015 downshift).
 3. Name every skill called in the JOURNAL `Skills called:` line, in call
    order; one round = one commit = one JOURNAL entry.
 4. Keep ≥2 distinct skills per round (T0 + one executed lane/support skill);
