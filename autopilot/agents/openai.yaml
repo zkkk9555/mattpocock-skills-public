@@ -1,0 +1,5 @@
+interface:
+  display_name: "Mattpocock Skills"
+  short_description: "Drive the full engineering workflow end to end"
+policy:
+  allow_implicit_invocation: false
