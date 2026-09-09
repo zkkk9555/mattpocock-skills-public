@@ -59,7 +59,7 @@ DONE
 
 # Central logbook: create the first book from the example so the driver has
 # somewhere to append from day one (one book per install, language fixed).
-LOGBOOK="${MATTP_LOGBOOK:-$HOME/.mattpocock-skills/USAGE-LOG.md}"
+LOGBOOK="${MATTP_LOGBOOK:-$HOME/.autopilot/USAGE-LOG.md}"
 if [ ! -f "$LOGBOOK" ]; then
   mkdir -p "$(dirname "$LOGBOOK")"
   PUB_TMP="$(mktemp -d)"

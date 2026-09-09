@@ -24,12 +24,9 @@ friction for the next upgrade without self-modifying: `references/usage-log.md`
 (driver never edits its own files). Version notes v10–v40 live verbatim
 in `CHANGELOG.md`; rule details live in `references/` (§0–§5 split files).
 
-**V2.013: version-handoff (cross-harness by version, not by round).**
-Same V2.012 behaviour, plus: "continue in another harness next version"
-fires handoff for a version packet (delivered + decisions + todos + logbook
-path + suggested skills) — letter only, never auto-opens dialogue; the
-logbook is per-machine, so the packet names its path and entries merge back
-on return. Detail in `references/core-triggers.md` + `references/usage-log.md`.
+**V2.014: rename (mattpocock-skills → autopilot).**
+Same V2.013 behaviour; only names changed (package dir, skill name, hook
+line, installers, logbook default `~/.autopilot/`). No rule changes.
 
 ## Trigger table (one line per skill; fire at its moment, no human prompt)
 
