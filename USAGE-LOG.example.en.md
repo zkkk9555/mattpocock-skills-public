@@ -2,7 +2,7 @@
 
 > This is an **example file with fabricated data: format only, never written
 > to**. Manual install: copy it to your logbook path (default
-> `~/.mattpocock-skills/USAGE-LOG.md`, a fixed location outside any repo) as
+> `~/.autopilot/USAGE-LOG.md`, a fixed location outside any repo) as
 > your first book; the driver appends only there, never here. The one-command
 > installer creates the first book automatically. Pick one language and keep
 > it for the whole book — one book per install.

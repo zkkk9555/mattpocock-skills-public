@@ -51,7 +51,7 @@ try {
   Write-Host "==> Done. Restart your agent, then say one sentence, e.g.:"
   Write-Host '    "The sidebar toggle stopped working - check and fix it."'
   # Central logbook: create the first book so the driver can append from day one.
-  $Logbook = if ($env:MATTP_LOGBOOK) { $env:MATTP_LOGBOOK } else { Join-Path $HOME ".mattpocock-skills\USAGE-LOG.md" }
+  $Logbook = if ($env:MATTP_LOGBOOK) { $env:MATTP_LOGBOOK } else { Join-Path $HOME ".autopilot\USAGE-LOG.md" }
   if (-not (Test-Path $Logbook)) {
     New-Item -ItemType Directory -Force -Path (Split-Path $Logbook) | Out-Null
     $head = "# autopilot 中央使用日志`r`n`r`n> 本本由安装脚本创建（$((Get-Date).ToUniversalTime().ToString('yyyy-MM-dd'))）。规则：只追加、不改旧条；每次任务收尾追加一条；升级打水位线。格式见 USAGE-LOG.example.md。`r`n"
