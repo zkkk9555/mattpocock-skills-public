@@ -24,9 +24,13 @@ friction for the next upgrade without self-modifying: `references/usage-log.md`
 (driver never edits its own files). Version notes v10–v40 live verbatim
 in `CHANGELOG.md`; rule details live in `references/` (§0–§5 split files).
 
-**V2.014: rename (mattpocock-skills → autopilot).**
-Same V2.013 behaviour; only names changed (package dir, skill name, hook
-line, installers, logbook default `~/.autopilot/`). No rule changes.
+**V2.016: round-boundaries (understand-vs-build split, heartbeat review object, stale-version self-check).**
+Same V2.015 behaviour (V2.014 rename carried over), plus: understanding rounds
+touch nothing, build nothing, count nothing — crossing into build needs a new
+round with a written transition; heartbeat review audits product freshness,
+not diffs; self-bootstrap starts by checking the installed skill version
+against the logbook watermark and re-reading on mismatch. Detail in
+`references/`.
 
 ## Trigger table (one line per skill; fire at its moment, no human prompt)
 
@@ -63,8 +67,11 @@ above only routes; the pointed file decides.
 ## Cross-round resume (read files, not memory)
 
 1. Self-bootstrap first: on the first round of a session (or after any
-   compact/clear, or whenever unsure) re-read this SKILL.md and the
-   `references/` files it points at; later rounds in the same session skip
+   compact/clear, or whenever unsure) check the installed skill version
+   (this file's version line) against the logbook's last `[水位线]` — on
+   mismatch, re-read this SKILL.md and the `references/` files it points at
+   (V2.016 stale-version self-check: old rules in context are worse than no
+   rules); later rounds in the same session skip
    the re-read and rely on what is already in context. Then read the project
    convention tail, the last 5 JOURNAL entries, and the last 10 `calls.log`
    lines before acting. Logbook discipline (V2.015): read the last

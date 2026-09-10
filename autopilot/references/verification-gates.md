@@ -104,6 +104,12 @@ SIGTERM hit a stash-triggered gc mid-red-phase):
   of a round, take a count/snapshot baseline (`find . -type f | wc -l`,
   `git status` benchmark before running file-writing "tests"). Reconcile
   after: baseline + delta = final, or explain the gap.
+- **Heartbeat review object (V2.016).** Zero-change heartbeat rounds have no
+  diff to review — the review object is product freshness instead: package
+  timestamps are this round's, CHECKS rewritten, smoke re-run. "All green"
+  without a freshness check is not a review. Full heartbeat shape:
+  full-regression + dual-package rebuild + portable sync — all three or it
+  is not a complete heartbeat.
 - **Zero-hit means switch approach.** First grep version zero hits →
   constant tables / full dumps / two-way pincer — never bigger regexes.
   When fixing environment bugs, close by asking "which sibling risks share

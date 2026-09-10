@@ -41,9 +41,11 @@ Lane E（raw pile）进 lane 前先走 triage 状态机，不是直接开干：
 - **triage→diagnosing-bugs 衔接**：triage 出的 bug 票必须独立复现一遍——**不轻信 reporter 结论**（作者原话），复现步骤自己重做，复现证据进 brief。
 - **spec 审计定位（V2.012，作者"spec 用完"精神）**：spec 冻结为基线后不再改（V2.009 已有），审计只看 issues + CHANGELOG，不回看 spec——spec 是目的地文档，不是活档案。证据链不断（issues 全链 + 水位线日志），但 spec 本体封存。
 
-## 纯理解任务：不进 lane（V2.005）
+## 纯理解任务：不进 lane（V2.005，不改仓，不建标记，不计工程轮）
 
-用户只说理解一下项目、看看代码，没有任何改动要求 → 不进 A/B/C/D/E 任何 lane，不写 spec，不碰仓库文件。做法：T0 分流判无 lane → 通读 ground-truth（README/入口/配置）→ 可派一个 Explore 子代理扫全仓 → 对话内给理解报告。setup 的首次进仓也不触发，等首个真实工程轮再做。只读轮无 verify 可贴，按 delivery-check 精神给零改动声明 + 可抽查清单。
+用户只说理解一下项目、看看代码，没有任何改动要求 → 不进 A/B/C/D/E 任何 lane，不写 spec，不碰仓库文件，不建 WORKFLOW-ACTIVE，不计工程轮次。做法：T0 分流判无 lane → 通读 ground-truth（README/入口/配置）→ 可派一个 Explore 子代理扫全仓 → 对话内给理解报告。setup 的首次进仓也不触发，等首个真实工程轮再做。只读轮无 verify 可贴，按 delivery-check 精神给零改动声明 + 可抽查清单。
+
+**理解→动手边界（V2.016）**：理解轮内出现改动意图（"顺手修了""顺便加了"）→ 停手，另起工程轮（理解报告先交付，改动走新一轮 T0 + Gate 0 + lane）。一轮之内"先理解后动手"必须有书面 transition（"理解结束，转 Lane X"），无 transition 的混合轮 = malformed。反例：同轮先写"判为纯理解轮"又写"走 Lane C 先 chart"——两张皮，必拆两轮。
 
 ## 子 skill 只回文档：inline 执行并注记（V2.005）
 
