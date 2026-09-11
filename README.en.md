@@ -39,41 +39,68 @@ discipline" into "quality by process":
 
 > **Prerequisite**: this driver is the commander — the ones doing the work are
 > the 25 upstream workflow skills
-> ([mattpocock/skills](https://github.com/mattpocock/skills)). They must be
-> installed into a skills directory for the driver to invoke them. Without
-> them the driver still runs (built-in speed notes as fallback), but with
-> weaker in-process discipline.
+> ([mattpocock/skills](https://github.com/mattpocock/skills)). Install all 26
+> together (anything less is a partial install); driver-only runs on built-in
+> speed notes with weaker discipline.
 
-**One-command install (includes the 25 upstream skills, recommended)** — bash
-(macOS / Linux / Git Bash):
+**One-command install (all 26, recommended)** — bash (macOS / Linux / Git Bash):
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/zkkk9555/autopilot-skill/main/install.sh | bash -s -- --with-upstream
+curl -fsSL https://raw.githubusercontent.com/zkkk9555/autopilot-skill/main/install.sh | bash
 ```
 
-Windows PowerShell:
+Windows PowerShell (if execution policy blocks, run `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned` first):
 
 ```powershell
-& ([scriptblock]::Create((irm https://raw.githubusercontent.com/zkkk9555/autopilot-skill/main/install.ps1))) -WithUpstream
+& ([scriptblock]::Create((irm https://raw.githubusercontent.com/zkkk9555/autopilot-skill/main/install.ps1)))
 ```
 
-Default target is `~/.agents/skills/` (the cross-tool standard); override with
-the `AUTOPILOT_SKILLS_DIR` environment variable.
+Default target is `~/.agents/skills/` (community convention honored by ZCode,
+Cursor, OpenCode, and others); the script also writes to your detected harness
+dir when unambiguous. **Verify in your tool that the skill list shows
+autopilot** — otherwise it landed in the wrong place. Variants:
 
-**Manual install**: (1) upstream 25 skills: `git clone --depth 1
-https://github.com/mattpocock/skills`, copy every `SKILL.md`-bearing directory
-under `skills/*/*/` flattened by its **last path segment** into the skills
-directory (e.g. `skills/engineering/ask-matt/` → `ask-matt/`); (2) this driver:
-copy `autopilot/` into the same skills directory.
+```bash
+bash install.sh --harness zcode          # auto|claude|codex|cursor|opencode|zcode|all
+bash install.sh --harness zcode --dry-run # preview only
+bash install.sh --slim                    # driver only (offline/CI)
+bash install.sh --dir /my/harness/skills  # unknown harness
+bash install.sh --uninstall               # remove (keeps logbook)
+```
 
-**Common skills directories** (pick one — agents discover them automatically):
+**Alternative: official commands** — this repo works with `npx skills` as-is:
 
-| Location | Applies to |
-|---|---|
-| `~/.agents/skills/` | cross-tool standard (recommended) |
-| `~/.zcode/skills/` | ZCode |
-| `~/.claude/skills/` | Claude Code |
-| `<project>/.agents/skills/` | current project only |
+```bash
+npx skills@latest add zkkk9555/autopilot-skill -g -a zcode -y   # -a: claude-code|codex|cursor
+npx skills@latest add mattpocock/skills -g -a zcode --skill '*' -y  # upstream 25
+```
+
+Note: the CLI installs per-harness dirs (not `~/.agents/skills/`) and skips the
+logbook — add one manually per the example file. Claude Code users can also use
+the plugin marketplace: `/plugin marketplace add zkkk9555/autopilot-skill`,
+then `/plugin install autopilot`.
+
+**Manual install (unknown harness, 2-minute self-serve)**: (1) find your skills
+dir (search your tool's docs/settings for `skills`; else try
+`~/.agents/skills/`); (2) `git clone --depth 1
+https://github.com/zkkk9555/autopilot-skill` and `git clone --depth 1
+https://github.com/mattpocock/skills` (or download both zips); (3) driver
+`autopilot/` → `<skills>/autopilot/`, upstream: every `SKILL.md`-bearing dir
+under `skills/*/*/` flattened by its **last path segment**
+(e.g. `skills/engineering/ask-matt/` → `<skills>/ask-matt/`); (4) verify:
+`<skills>/autopilot/SKILL.md` starts with `name: autopilot`,
+`<skills>/*/SKILL.md` count is 26, restart the agent and say "The sidebar
+toggle stopped working — check and fix it."
+
+**Directory map** (each agent reads its own dirs — nothing is universal):
+
+| Location | Applies to | One-command |
+|---|---|---|
+| `~/.agents/skills/` | ZCode, Cursor, OpenCode, etc. (community convention) | default target |
+| `~/.zcode/skills/` | ZCode | `--harness zcode` |
+| `~/.claude/skills/` | Claude Code | `--harness claude` (or marketplace) |
+| `~/.codex/skills/` | Codex | `--harness codex` |
+| `<project>/.agents/skills/` | current project only | `--dir` pointing at it |
 
 ## Use
 
