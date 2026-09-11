@@ -28,9 +28,11 @@ echo "    installed -> $DEST/autopilot"
 if [ "${1:-}" = "--with-upstream" ]; then
   echo "==> Downloading upstream 25 workflow skills ($UPSTREAM_URL)"
   curl -fsSL "$UPSTREAM_URL/archive/refs/heads/main.tar.gz" -o "$TMP/up.tar.gz"
-  tar -xzf "$TMP/up.tar.gz" -C "$TMP"
+  # 上游包内 AGENTS.md 是指向 CLAUDE.md 的 symlink，MSYS tar 解 symlink 会失败——排除它（文档软链，不影响 skill）
+  tar -xzf "$TMP/up.tar.gz" -C "$TMP" --exclude='skills-main/AGENTS.md' || true
   count=0
-  for d in "$TMP"/skills-main/*/; do
+  # 上游布局 skills-main/skills/<bucket>/<name>/SKILL.md —— 取最后一级目录名装平
+  for d in "$TMP"/skills-main/skills/*/*/; do
     name="$(basename "$d")"
     [ -f "$d/SKILL.md" ] || continue
     rm -rf "$DEST/$name"

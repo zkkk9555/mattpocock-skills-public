@@ -35,7 +35,7 @@ Windows PowerShell：
 
 默认装到 `~/.agents/skills/`（跨工具通用目录）；想换位置，设置环境变量 `AUTOPILOT_SKILLS_DIR`。
 
-**手动安装**：① 上游 25 skill：`git clone --depth 1 https://github.com/mattpocock/skills`，把每个含 `SKILL.md` 的子目录复制进 skills 目录；② 本 driver：把 `autopilot/` 复制进同一个 skills 目录。
+**手动安装**：① 上游 25 skill：`git clone --depth 1 https://github.com/mattpocock/skills`，把 `skills/*/*/ ` 下每个含 `SKILL.md` 的目录按**最后一级目录名**装平进 skills 目录（如 `skills/engineering/ask-matt/` → `ask-matt/`）；② 本 driver：把 `autopilot/` 复制进同一个 skills 目录。
 
 **常见的 skills 目录**（任选其一，agent 会自动发现）：
 

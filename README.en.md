@@ -61,9 +61,10 @@ Default target is `~/.agents/skills/` (the cross-tool standard); override with
 the `AUTOPILOT_SKILLS_DIR` environment variable.
 
 **Manual install**: (1) upstream 25 skills: `git clone --depth 1
-https://github.com/mattpocock/skills`, copy every sub-directory containing a
-`SKILL.md` into the skills directory; (2) this driver: copy
-`autopilot/` into the same skills directory.
+https://github.com/mattpocock/skills`, copy every `SKILL.md`-bearing directory
+under `skills/*/*/` flattened by its **last path segment** into the skills
+directory (e.g. `skills/engineering/ask-matt/` → `ask-matt/`); (2) this driver:
+copy `autopilot/` into the same skills directory.
 
 **Common skills directories** (pick one — agents discover them automatically):
 

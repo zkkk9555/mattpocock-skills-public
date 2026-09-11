@@ -29,14 +29,19 @@ try {
   if ($WithUpstream) {
     Write-Host "==> Downloading upstream 25 workflow skills"
     Invoke-WebRequest "$UpstreamUrl/archive/refs/heads/main.tar.gz" -OutFile "$Tmp\up.tar.gz"
-    tar -xzf "$Tmp\up.tar.gz" -C $Tmp
+    # 上游包内 AGENTS.md 是 symlink，解包失败不致命（文档软链，不影响 skill）
+    tar -xzf "$Tmp\up.tar.gz" -C $Tmp --exclude='skills-main/AGENTS.md'
+    if ($LASTEXITCODE -ne 0) { Write-Host "!! upstream extract had warnings, continuing" }
     $count = 0
-    Get-ChildItem (Join-Path $Tmp "skills-main") -Directory | ForEach-Object {
-      if (Test-Path (Join-Path $_.FullName "SKILL.md")) {
-        $target = Join-Path $Dest $_.Name
-        if (Test-Path $target) { Remove-Item -Recurse -Force $target }
-        Copy-Item -Recurse -Force $_.FullName $target
-        $count++
+    # 上游布局 skills-main/skills/<bucket>/<name>/SKILL.md —— 取最后一级目录名装平
+    Get-ChildItem (Join-Path $Tmp "skills-main\skills") -Directory | ForEach-Object {
+      Get-ChildItem $_.FullName -Directory | ForEach-Object {
+        if (Test-Path (Join-Path $_.FullName "SKILL.md")) {
+          $target = Join-Path $Dest $_.Name
+          if (Test-Path $target) { Remove-Item -Recurse -Force $target }
+          Copy-Item -Recurse -Force $_.FullName $target
+          $count++
+        }
       }
     }
     Write-Host "    installed $count upstream skills -> $Dest"
