@@ -56,6 +56,32 @@ detect_harness() { # exactly one strong env signal -> name, else empty
 }
 
 TARGETS="$HOME/.agents/skills"
+ask_menu() { # interactive 6-item menu; prints chosen harness or path; silent fallback
+  [ -t 0 ] && [ -r /dev/tty ] || return 1
+  local det="$1" def=2 i
+  [ -n "$det" ] && def=1
+  {
+    echo "请选择安装位置（默认装通用目录；探测命中标 ★）："
+    if [ -n "$det" ]; then echo "1) ★ 检测到：$det ($(harness_dir "$det"))"; else echo "1) 自动检测（未命中）"; fi
+    echo "2) 通用目录 (~/.agents/skills/)"
+    echo "3) Claude Code (~/.claude/skills/)"
+    echo "4) Codex (~/.codex/skills/)"
+    echo "5) Cursor (~/.cursor/skills/)"
+    echo "6) 自定义路径（输入）"
+    printf "请选择 [${def}]: "
+  } >/dev/tty
+  local ans=""; IFS= read -r ans </dev/tty 2>/dev/null || return 1
+  ans="${ans:-$def}"
+  case "$ans" in
+    1) [ -n "$det" ] && { echo "HARNESS:$det"; return 0; }; return 1;;
+    2) echo "HARNESS:generic"; return 0;;
+    3) echo "HARNESS:claude"; return 0;;
+    4) echo "HARNESS:codex"; return 0;;
+    5) echo "HARNESS:cursor"; return 0;;
+    6) { printf "请输入 skills 目录完整路径: " >/dev/tty; local p=""; IFS= read -r p </dev/tty 2>/dev/null || return 1; [ -n "$p" ] && { echo "DIR:$p"; return 0; }; return 1; };;
+    *) return 1;;
+  esac
+}
 if [ -n "$DIR" ]; then
   TARGETS="$DIR" # explicit dir wins, exclusive
 elif [ "$HARNESS" = "all" ]; then
@@ -64,7 +90,15 @@ elif [ "$HARNESS" != "auto" ]; then
   d="$(harness_dir "$HARNESS")"; [ -n "$d" ] && [ "$d" != "$HOME/.agents/skills" ] && TARGETS="$TARGETS $d"
 else
   det="$(detect_harness)"
-  if [ -n "$det" ]; then
+  if [ -t 0 ] || [ -r /dev/tty ]; then
+    pick="$(ask_menu "$det" 2>/dev/null)" || pick=""
+    case "$pick" in
+      HARNESS:generic) :;;
+      HARNESS:*) HARNESS="${pick#HARNESS:}"; d="$(harness_dir "$HARNESS")"; [ -n "$d" ] && [ "$d" != "$HOME/.agents/skills" ] && TARGETS="$TARGETS $d";;
+      DIR:*) TARGETS="${pick#DIR:}";;
+      *) [ -n "$det" ] && { d="$(harness_dir "$det")"; [ "$d" != "$HOME/.agents/skills" ] && TARGETS="$TARGETS $d"; };;
+    esac
+  elif [ -n "$det" ]; then
     d="$(harness_dir "$det")"; [ "$d" != "$HOME/.agents/skills" ] && TARGETS="$TARGETS $d"
   fi
 fi
@@ -121,7 +155,7 @@ for t in $TARGETS; do
   done
   want_n=$(echo "$WANT" | wc -w)
   if [ "$have" -eq "$want_n" ]; then
-    echo "OK $t: autopilot + upstream ($have/$want_n SKILL.md)"
+    echo "OK $t: required $have/$want_n SKILL.md (plus any new upstream extras)"
   else
     echo "WARNING $t: only $have/$want_n (missing:$missing) — rerun full install"
     [ "$SLIM" = 1 ] || fail=0 # degraded but exit 0; driver alone still works only if autopilot OK

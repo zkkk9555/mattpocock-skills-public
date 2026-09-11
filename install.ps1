@@ -45,7 +45,32 @@ if ($env:AUTOPILOT_SKILLS_DIR -and -not $Dir) { $Dir = $env:AUTOPILOT_SKILLS_DIR
 if ($Dir) { $Targets = @($Dir) }
 elseif ($Harness -eq 'all') { $Targets += @('claude','codex','cursor','opencode','zcode' | ForEach-Object { Harness-Dir $_ }) }
 elseif ($Harness -ne 'auto') { $d = Harness-Dir $Harness; if ($d -and ($Targets -notcontains $d)) { $Targets += $d } }
-else { $det = Detect-Harness; if ($det) { $d = Harness-Dir $det; if ($Targets -notcontains $d) { $Targets += $d } } }
+else {
+  $det = Detect-Harness
+  try {
+    $isTty = (-not [Console]::IsInputRedirected)
+  } catch { $isTty = $false }
+  if ($isTty -and -not $env:AUTOPILOT_NO_MENU) {
+    $def = 2; if ($det) { $def = 1 }
+    Write-Host '请选择安装位置（默认装通用目录；探测命中标 ★）：'
+    if ($det) { Write-Host "1) ★ 检测到：$det ($(Harness-Dir $det))" } else { Write-Host '1) 自动检测（未命中）' }
+    Write-Host '2) 通用目录 (~/.agents/skills/)'
+    Write-Host '3) Claude Code (~/.claude/skills/)'
+    Write-Host '4) Codex (~/.codex/skills/)'
+    Write-Host '5) Cursor (~/.cursor/skills/)'
+    Write-Host "6) 自定义路径（输入）"
+    $ans = Read-Host "请选择 [$def]"
+    if (-not $ans) { $ans = "$def" }
+    switch ($ans) {
+      '1' { if ($det) { $d = Harness-Dir $det; if ($Targets -notcontains $d) { $Targets += $d } } }
+      '2' { }
+      '3' { $d = Harness-Dir 'claude'; if ($Targets -notcontains $d) { $Targets += $d } }
+      '4' { $d = Harness-Dir 'codex'; if ($Targets -notcontains $d) { $Targets += $d } }
+      '5' { $d = Harness-Dir 'cursor'; if ($Targets -notcontains $d) { $Targets += $d } }
+      '6' { $p = Read-Host '请输入 skills 目录完整路径'; if ($p) { $Targets = @($p) } }
+    }
+  } elseif ($det) { $d = Harness-Dir $det; if ($Targets -notcontains $d) { $Targets += $d } }
+}
 
 $Want = @('autopilot'); if (-not $Slim) { $Want += $UpstreamNames }
 
@@ -98,7 +123,7 @@ try {
     if ($head -notmatch '(?m)^name: autopilot') { Write-Host "ERROR: $t\autopilot\SKILL.md frontmatter wrong"; $fail = $true }
     $have = 0; $miss = @()
     foreach ($n in $Want) { if (Test-Path "$t\$n\SKILL.md") { $have++ } else { $miss += $n } }
-    if ($have -eq $Want.Count) { Write-Host "OK ${t}: autopilot + upstream ($have/$($Want.Count) SKILL.md)" }
+    if ($have -eq $Want.Count) { Write-Host "OK ${t}: required $have/$($Want.Count) SKILL.md (plus any new upstream extras)" }
     else { Write-Host "WARNING ${t}: only $have/$($Want.Count) (missing: $($miss -join ',')) — rerun full install" }
   }
   if (-not $NoLogbook) {

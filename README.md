@@ -19,9 +19,9 @@
 
 ## 安装
 
-> **前置说明**：本 driver 是指挥官，真正干活的是上游 25 个工作流 skill（[mattpocock/skills](https://github.com/mattpocock/skills)）。必须连上游一起装（共 26 个，少一个都是残的），driver 才能完整调用；只装 driver 也能跑（内置速记版兜底），但过程纪律会打折。
+> **前置说明**：本 driver 是指挥官，真正干活的是上游 25 个工作流 skill（[mattpocock/skills](https://github.com/mattpocock/skills)）。必须连上游一起装（driver + 上游 25 个核心共 26 个必需，上游新增照单全收，少必需项才是残的），driver 才能完整调用；只装 driver 也能跑（内置速记版兜底），但过程纪律会打折。
 
-**一键安装（默认装全 26 个，推荐）**——bash（macOS / Linux / Git Bash）：
+**一键安装（默认装全：driver + 上游，推荐）**——bash（macOS / Linux / Git Bash）：
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/zkkk9555/autopilot-skill/main/install.sh | bash
@@ -41,6 +41,8 @@ bash install.sh --harness zcode --dry-run # 先预览，不动文件
 bash install.sh --slim                    # 只要 driver（离线/CI 用）
 bash install.sh --dir /my/harness/skills  # 冷门 harness 自定义目录
 bash install.sh --uninstall               # 卸载（不动日志本）
+
+怕装错地方？先 `--dry-run` 预览，或 `--dir /tmp/x --no-logbook` 装到隔离目录验证。
 ```
 
 **备选：官方命令**——本仓库已兼容 `npx skills` 生态（零改动实测通过）：
@@ -52,7 +54,7 @@ npx skills@latest add mattpocock/skills -g -a zcode --skill '*' -y  # 上游 25 
 
 注意：`npx skills` 按 harness 分目录安装（不在 `~/.agents/skills/`），且不建日志本——装完对照下面的手动步骤补一份日志本。Claude Code 用户也可用插件市场：`/plugin marketplace add zkkk9555/autopilot-skill` 后 `/plugin install autopilot`。
 
-**手动安装（未知 harness 2 分钟自助）**：① 找你的 skills 目录（翻工具文档/设置搜 skills；找不到先试 `~/.agents/skills/`）；② `git clone --depth 1 https://github.com/zkkk9555/autopilot-skill` 和 `git clone --depth 1 https://github.com/mattpocock/skills`（或下载两 zip）；③ 本 driver `autopilot/` → `<skills>/autopilot/`，上游 `skills/*/*/` 下每个含 `SKILL.md` 的目录按**最后一级目录名**装平（如 `skills/engineering/ask-matt/` → `<skills>/ask-matt/`）；④ 验证：`<skills>/autopilot/SKILL.md` 首行含 `name: autopilot`，`<skills>/*/SKILL.md` 共 26 个，重启 agent 后说“切换按钮失效了，去检查修一下”。
+**手动安装（未知 harness 2 分钟自助）**：① 找你的 skills 目录（翻工具文档/设置搜 skills；找不到先试 `~/.agents/skills/`）；② `git clone --depth 1 https://github.com/zkkk9555/autopilot-skill` 和 `git clone --depth 1 https://github.com/mattpocock/skills`（或下载两 zip）；③ 本 driver `autopilot/` → `<skills>/autopilot/`，上游 `skills/*/*/` 下每个含 `SKILL.md` 的目录按**最后一级目录名**装平（如 `skills/engineering/ask-matt/` → `<skills>/ask-matt/`）；④ 验证：`<skills>/autopilot/SKILL.md` 首行含 `name: autopilot`，`<skills>/*/SKILL.md` 至少 26 个（含 autopilot），重启 agent 后说“切换按钮失效了，去检查修一下”。
 
 **目录对照**（agent 只认自己的目录，不存在全宇宙通用）：
 

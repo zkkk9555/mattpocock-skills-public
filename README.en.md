@@ -43,7 +43,7 @@ discipline" into "quality by process":
 > together (anything less is a partial install); driver-only runs on built-in
 > speed notes with weaker discipline.
 
-**One-command install (all 26, recommended)** — bash (macOS / Linux / Git Bash):
+**One-command install (driver + upstream, recommended)** — bash (macOS / Linux / Git Bash):
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/zkkk9555/autopilot-skill/main/install.sh | bash
@@ -89,7 +89,7 @@ https://github.com/mattpocock/skills` (or download both zips); (3) driver
 under `skills/*/*/` flattened by its **last path segment**
 (e.g. `skills/engineering/ask-matt/` → `<skills>/ask-matt/`); (4) verify:
 `<skills>/autopilot/SKILL.md` starts with `name: autopilot`,
-`<skills>/*/SKILL.md` count is 26, restart the agent and say "The sidebar
+`<skills>/*/SKILL.md` count is at least 26 (including autopilot), restart the agent and say "The sidebar
 toggle stopped working — check and fix it."
 
 **Directory map** (each agent reads its own dirs — nothing is universal):
