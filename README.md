@@ -24,8 +24,8 @@
 > ```
 > 帮我装一下这个 skill：https://github.com/zkkk9555/autopilot-skill
 > 要求：driver（autopilot）+ 上游 25 个工作流 skill 共 26 个必需项，一个不能少；
-> 装到当前 Agent 的用户级 skills 目录；上游新增的 skill 照单全收；
-> 装完数一下 <skills>/*/SKILL.md 至少 26 个并告诉我结果。
+> 装到当前 harness 的用户级 skills 目录；上游新增的 skill 照单全收；
+> 装完逐个确认这 26 个都在：autopilot, ask-matt, code-review, codebase-design, diagnosing-bugs, domain-modeling, grill-me, grill-with-docs, grilling, handoff, implement, improve-codebase-architecture, prototype, research, resolving-merge-conflicts, setup-matt-pocock-skills, tdd, teach, to-questionnaire, to-spec, to-tickets, triage, wait-what, wayfinder, wizard, writing-for-agents；缺哪个、装到哪了，告诉我。
 > ```
 >
 > 上面这段话已实测通过（干净 Agent 只凭链接装出 26/26）。下面是给想自己动手的进阶内容，看不懂直接跳过。

@@ -42,9 +42,10 @@ discipline" into "quality by process":
 > ```
 > Install this skill: https://github.com/zkkk9555/autopilot-skill
 > Requirements: driver (autopilot) + 25 upstream workflow skills, 26 required
-> items total, none missing; install into the current agent's user-level skills
-> directory; take new upstream skills as they come; count <skills>/*/SKILL.md
-> (at least 26) and report the result.
+> items total, none missing; install into the current harness
+> user-level skills
+> directory; take new upstream skills as they come; verify these 26 exist one
+> by one: autopilot, ask-matt, code-review, codebase-design, diagnosing-bugs, domain-modeling, grill-me, grill-with-docs, grilling, handoff, implement, improve-codebase-architecture, prototype, research, resolving-merge-conflicts, setup-matt-pocock-skills, tdd, teach, to-questionnaire, to-spec, to-tickets, triage, wait-what, wayfinder, wizard, writing-for-agents; report any missing and where they landed.
 > ```
 >
 > This prompt is link-drop tested (clean agent installed 26/26 from the link
