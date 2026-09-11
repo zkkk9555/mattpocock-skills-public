@@ -19,9 +19,23 @@
 
 ## 安装
 
-> **前置说明**：本 driver 是指挥官，真正干活的是上游 25 个工作流 skill（[mattpocock/skills](https://github.com/mattpocock/skills)）。必须连上游一起装（driver + 上游 25 个核心共 26 个必需，上游新增照单全收，少必需项才是残的），driver 才能完整调用；只装 driver 也能跑（内置速记版兜底），但过程纪律会打折。
+> **一句话安装**：复制下面这段话发给你的 Agent，它会装好一切：
+>
+> ```
+> 帮我装一下这个 skill：https://github.com/zkkk9555/autopilot-skill
+> 要求：driver（autopilot）+ 上游 25 个工作流 skill 共 26 个必需项，一个不能少；
+> 装到当前 Agent 的用户级 skills 目录；上游新增的 skill 照单全收；
+> 装完数一下 <skills>/*/SKILL.md 至少 26 个并告诉我结果。
+> ```
+>
+> 上面这段话已实测通过（干净 Agent 只凭链接装出 26/26）。下面是给想自己动手的进阶内容，看不懂直接跳过。
 
-**一键安装（默认装全：driver + 上游，推荐）**——bash（macOS / Linux / Git Bash）：
+<details>
+<summary>进阶：前置说明与一键命令</summary>
+
+本 driver 是指挥官，真正干活的是上游 25 个工作流 skill（[mattpocock/skills](https://github.com/mattpocock/skills)）。必须连上游一起装（driver + 上游 25 个核心共 26 个必需，上游新增照单全收，少必需项才是残的）；只装 driver 也能跑（内置速记版兜底），但过程纪律会打折。
+
+bash（macOS / Linux / Git Bash）：
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/zkkk9555/autopilot-skill/main/install.sh | bash
@@ -33,38 +47,19 @@ Windows PowerShell（若报执行策略错误，先跑 `Set-ExecutionPolicy -Sco
 & ([scriptblock]::Create((irm https://raw.githubusercontent.com/zkkk9555/autopilot-skill/main/install.ps1)))
 ```
 
-默认装到 `~/.agents/skills/`（ZCode、Cursor、OpenCode 等认的社区约定目录）；脚本会自动探测当前 harness（ZCode/Claude/Codex/Cursor/OpenCode），命中且唯一时多写一份到对应目录。装完**必须去你的工具里确认 skill 列表出现了 autopilot**，否则就是装错了地方。常用变体：
+默认装到 `~/.agents/skills/`；脚本会自动探测当前 harness，命中且唯一时多写一份。装完**必须去工具里确认 skill 列表出现了 autopilot**。常用变体：`--harness zcode` 指定 harness，`--dry-run` 预览，`--slim` 只要 driver，`--dir` 自定义目录，`--uninstall` 卸载。怕装错？先 `--dry-run` 预览。
 
-```bash
-bash install.sh --harness zcode          # 指定 harness（auto|claude|codex|cursor|opencode|zcode|all）
-bash install.sh --harness zcode --dry-run # 先预览，不动文件
-bash install.sh --slim                    # 只要 driver（离线/CI 用）
-bash install.sh --dir /my/harness/skills  # 冷门 harness 自定义目录
-bash install.sh --uninstall               # 卸载（不动日志本）
+</details>
 
-怕装错地方？先 `--dry-run` 预览，或 `--dir /tmp/x --no-logbook` 装到隔离目录验证。
-```
+<details>
+<summary>进阶：其他装法（npx / 插件市场 / 手动）</summary>
 
-**备选：官方命令**——本仓库已兼容 `npx skills` 生态（零改动实测通过）：
+- `npx skills`（备选）：`npx skills@latest add zkkk9555/autopilot-skill -g -a zcode -y`（`-a` 换 claude-code|codex|cursor），再 `npx skills@latest add mattpocock/skills -g -a zcode --skill '*' -y` 装上游。注意它按 harness 分目录装且不建日志本，装完补一份日志本。
+- Claude Code 插件市场：`/plugin marketplace add zkkk9555/autopilot-skill` 后 `/plugin install autopilot`。
+- 手动（未知 harness）：找你的 skills 目录 → clone 两仓库 → `autopilot/` 拷过去，上游 `skills/*/*/` 按最后一级目录名装平 → 验证 26 个 → 重启说“切换按钮失效了，去检查修一下”。
+- 目录对照：`~/.agents/skills/`（ZCode/Cursor/OpenCode 等）|`~/.zcode/skills/`（ZCode）|`~/.claude/skills/`（Claude Code）|`~/.codex/skills/`（Codex）|`<项目>/.agents/skills/`（仅当前项目）。没有任何目录是全宇宙通用的，装完必须确认。
 
-```bash
-npx skills@latest add zkkk9555/autopilot-skill -g -a zcode -y   # -a 换 claude-code|codex|cursor
-npx skills@latest add mattpocock/skills -g -a zcode --skill '*' -y  # 上游 25 个
-```
-
-注意：`npx skills` 按 harness 分目录安装（不在 `~/.agents/skills/`），且不建日志本——装完对照下面的手动步骤补一份日志本。Claude Code 用户也可用插件市场：`/plugin marketplace add zkkk9555/autopilot-skill` 后 `/plugin install autopilot`。
-
-**手动安装（未知 harness 2 分钟自助）**：① 找你的 skills 目录（翻工具文档/设置搜 skills；找不到先试 `~/.agents/skills/`）；② `git clone --depth 1 https://github.com/zkkk9555/autopilot-skill` 和 `git clone --depth 1 https://github.com/mattpocock/skills`（或下载两 zip）；③ 本 driver `autopilot/` → `<skills>/autopilot/`，上游 `skills/*/*/` 下每个含 `SKILL.md` 的目录按**最后一级目录名**装平（如 `skills/engineering/ask-matt/` → `<skills>/ask-matt/`）；④ 验证：`<skills>/autopilot/SKILL.md` 首行含 `name: autopilot`，`<skills>/*/SKILL.md` 至少 26 个（含 autopilot），重启 agent 后说“切换按钮失效了，去检查修一下”。
-
-**目录对照**（agent 只认自己的目录，不存在全宇宙通用）：
-
-| 位置 | 适用 | 一键命令 |
-|---|---|---|
-| `~/.agents/skills/` | ZCode、Cursor、OpenCode 等（社区约定） | 默认即装这里 |
-| `~/.zcode/skills/` | ZCode | `--harness zcode` |
-| `~/.claude/skills/` | Claude Code | `--harness claude`（或插件市场） |
-| `~/.codex/skills/` | Codex | `--harness codex` |
-| `<项目>/.agents/skills/` | 仅当前项目 | `--dir` 指向它 |
+</details>
 
 ## 使用
 
